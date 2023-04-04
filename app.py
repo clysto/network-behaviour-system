@@ -5,6 +5,7 @@ from config import router
 
 router.add_page_class("/dataset", DatasetPage)
 router.add_page_class("/cluster", ClusterPage)
+router.add_page_class("/login", LoginPage)
 
 app.add_static_files("/public", "public")
 

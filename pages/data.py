@@ -9,7 +9,6 @@ class DatasetPage:
         if page < 1:
             return
         self.current_page = page
-        print(self.current_page)
         data = load_dataset((self.current_page - 1) * 100, limit=100).to_dict("records")
         self.table.rows.clear()
         self.table.rows.extend(data)

@@ -4,7 +4,7 @@ from nicegui import ui
 
 @router.add("/")
 async def home_page():
-    with ui.column().style("height: calc(100vh - 68px - 32px)").classes(
+    with ui.column().style("height: calc(100vh - 68px - 53px)").classes(
         "bg-[#3874c8] justify-center items-center"
     ):
 
