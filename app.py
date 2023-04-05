@@ -4,6 +4,7 @@ from pages import *
 from config import router
 
 router.add_page_class("/dataset", DatasetPage)
+router.add_page_class("/hours", HoursPage)
 router.add_page_class("/cluster", ClusterPage)
 router.add_page_class("/login", LoginPage)
 
@@ -26,6 +27,9 @@ async def main(client: Client):
                 "font-bold"
             ).props("flat color=white")
             ui.button("数据集", on_click=lambda: router.open("/dataset")).classes(
+                "font-bold"
+            ).props("flat color=white")
+            ui.button("上网时间分析", on_click=lambda: router.open("/hours")).classes(
                 "font-bold"
             ).props("flat color=white")
             ui.button("聚类分析", on_click=lambda: router.open("/cluster")).classes(
