@@ -1,17 +1,18 @@
 import pandas as pd
+from db import db
+
+CACHE = None
 
 
 def load_dataset(offset=0, limit=100):
+    global CACHE
     if limit == -1:
-        return pd.read_csv(
-            "data/train_data.csv",
-            encoding="gbk",
-            skiprows=[i for i in range(1, offset + 1)],
-        )
+        if CACHE is None:
+            records = db["dataset"].find()
+            df = pd.DataFrame(list(records))
+            CACHE = df
+        return CACHE
     else:
-        return pd.read_csv(
-            "data/train_data.csv",
-            encoding="gbk",
-            skiprows=[i for i in range(1, offset + 1)],
-            nrows=limit,
-        )
+        records = db["dataset"].find().skip(offset).limit(limit)
+        df = pd.DataFrame(list(records))
+        return df

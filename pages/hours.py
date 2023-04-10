@@ -1,6 +1,7 @@
 from nicegui import ui
 from analyse.main import used_by_hour, used_by_group
 from data import load_dataset
+from config import task_manager
 
 
 class HoursPage:
@@ -21,15 +22,25 @@ class HoursPage:
             chart["xAxis"]["categories"].append("{:02d}:00".format(h))
         return chart
 
-    def build_chart(self):
-        dataset = load_dataset(limit=-1)
+    def build_chart(self, dataset):
         if self.group != "所有":
             dataset = dataset[dataset["group"] == self.group]
         if self.chart is None:
-            self.chart = ui.chart(self.get_chart(dataset)).classes("w-full h-128 mt-16")
+            with self.div:
+                self.chart = ui.chart(self.get_chart(dataset)).classes(
+                    "w-full h-128 mt-16"
+                )
+            self.chart.update()
         else:
             self.chart._props["options"] = self.get_chart(dataset)
             self.chart.update()
+        self.button1.props("loading=false")
+        self.button1.update()
+
+    def on_button1_click(self):
+        self.button1.props("loading")
+        self.button1.update()
+        task_manager.add_task(load_dataset, self.build_chart, limit=-1)
 
     def build_chart2(self):
         if self.chart2 is None:
@@ -69,9 +80,12 @@ class HoursPage:
                         ],
                         label="部门",
                     ).props("filled").bind_value(self, "group")
-                    ui.button("分析上网时间分布", on_click=self.build_chart).props(
-                        "push"
-                    ).classes("full-width mt-4")
+                    self.button1 = (
+                        ui.button("分析上网时间分布", on_click=self.on_button1_click)
+                        .props("push")
+                        .classes("full-width mt-4")
+                    )
+                    self.div = ui.element("div")
                 with ui.tab_panel("各部门上网人数"):
                     ui.button("分析上网部门分布", on_click=self.build_chart2).props(
                         "push"

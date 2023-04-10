@@ -1,8 +1,6 @@
 from nicegui import ui
 from config import router
-
-
-USERS = {"admin": {"password": "admin", "username": "admin"}}
+from db import db
 
 
 class LoginPage:
@@ -10,10 +8,10 @@ class LoginPage:
     password = ""
 
     def login(self):
-        if self.username not in USERS:
+        user = db["users"].find_one({"username": self.username})
+        if user is None:
             ui.notify("不存在该用户！", type="warning", position="top")
             return
-        user = USERS[self.username]
         if user["password"] == self.password:
             ui.notify("登录成功！", position="top")
             router.open("/dataset")
