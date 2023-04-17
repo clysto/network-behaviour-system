@@ -5,6 +5,7 @@ from nicegui import ui
 class DatasetPage:
     current_page = 1
 
+
     def change_page(self, page):
         if page < 1:
             return
@@ -41,4 +42,4 @@ class DatasetPage:
                     ).props("push")
                 ui.element("div").classes("flex-1")
                 ui.button("导入数据").props("push")
-            self.table = ui.table(columns=columns, rows=data, title="数据集")
+            self.table = ui.table(columns=columns, rows=data, title="数据集").props("dense")

@@ -1,4 +1,4 @@
-from typing import Awaitable, Callable, Dict, Union
+from typing import Awaitable, Callable
 
 from nicegui import background_tasks, ui
 from nicegui.dependencies import register_component
@@ -22,6 +22,7 @@ class Router:
         self.routes[path] = ("class", page)
 
     def open(self, target: str):
+        print(target)
         path = target
         builder = self.routes[target]
 

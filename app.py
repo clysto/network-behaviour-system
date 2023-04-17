@@ -1,19 +1,26 @@
 from nicegui import ui, app, Client
+from fastapi import Request
+import uuid
 
 from pages import *
 from config import router
+from starlette.middleware.sessions import SessionMiddleware
 
 router.add_page_class("/dataset", DatasetPage)
 router.add_page_class("/hours", HoursPage)
 router.add_page_class("/cluster", ClusterPage)
 router.add_page_class("/login", LoginPage)
+router.add_page_class("/users", UsersPage)
 
 app.add_static_files("/public", "public")
+app.add_middleware(SessionMiddleware, secret_key="9a218947-b6cd-4010-a4b4-2fd4b4eac889")
 
 
 @ui.page("/")
 @ui.page("/{_:path}")
-async def main(client: Client):
+async def main(client: Client, request: Request):
+    if "id" not in request.session:
+        request.session["id"] = str(uuid.uuid4())
     client.content.classes("p-0")
     ui.colors(primary="#3874c8")
     with ui.header(elevated=True).style("background-color: #3874c8").classes(
@@ -33,6 +40,9 @@ async def main(client: Client):
                 "font-bold"
             ).props("flat color=white")
             ui.button("聚类分析", on_click=lambda: router.open("/cluster")).classes(
+                "font-bold"
+            ).props("flat color=white")
+            ui.button("用户管理", on_click=lambda: router.open("/users")).classes(
                 "font-bold"
             ).props("flat color=white")
             ui.button("登录", on_click=lambda: router.open("/login")).classes(

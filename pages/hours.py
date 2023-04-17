@@ -9,6 +9,7 @@ class HoursPage:
     chart = None
     chart2 = None
 
+
     def get_chart(self, dataset):
         r = used_by_hour(dataset)
         chart = {

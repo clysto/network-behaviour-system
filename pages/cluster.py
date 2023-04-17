@@ -3,7 +3,6 @@ from config import task_manager
 from analyse.main import k_means
 from data import load_dataset
 from matplotlib.figure import Figure
-import numpy as np
 import io
 import base64
 
@@ -13,6 +12,7 @@ class ClusterPage:
     plot = None
     k = "2"
     cols = "hour"
+
 
     def cluster(self):
         if self.k.isdigit():

@@ -1,6 +1,8 @@
 from nicegui import ui
 from config import router
 from db import db
+from fastapi import Request
+import uuid
 
 
 class LoginPage:
