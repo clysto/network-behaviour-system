@@ -1,6 +1,7 @@
 from nicegui import ui, app, Client
 from fastapi import Request
 import uuid
+from utils import set_item
 
 from pages import *
 from config import router
@@ -21,6 +22,8 @@ app.add_middleware(SessionMiddleware, secret_key="9a218947-b6cd-4010-a4b4-2fd4b4
 async def main(client: Client, request: Request):
     if "id" not in request.session:
         request.session["id"] = str(uuid.uuid4())
+    await client.connected()
+    await set_item("id", request.session["id"])
     client.content.classes("p-0")
     ui.colors(primary="#3874c8")
     with ui.header(elevated=True).style("background-color: #3874c8").classes(

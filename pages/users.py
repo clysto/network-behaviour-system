@@ -6,10 +6,16 @@ class UsersPage:
     username = ""
     password = ""
     email = ""
+    manage = "所有"
 
     def add_user(self):
         db.users.insert_one(
-            {"username": self.username, "password": self.password, "email": self.email}
+            {
+                "username": self.username,
+                "password": self.password,
+                "email": self.email,
+                "manage": self.manage,
+            }
         )
         self.load_users()
         self.dialog.close()
@@ -39,6 +45,19 @@ class UsersPage:
             ui.input("密码").bind_value(self, "password").classes("full-width").props(
                 "outlined"
             )
+            ui.select(
+                [
+                    "所有",
+                    "大一",
+                    "大二",
+                    "大三",
+                    "大四",
+                    "后勤",
+                    "办公室",
+                    "学工处",
+                ],
+                label="部门",
+            ).props("outlined").bind_value(self, "manage").classes("full-width")
             ui.button("取消", on_click=self.dialog.close).classes("full-width")
             ui.button("确定", on_click=self.add_user).classes("full-width")
         with self.container:

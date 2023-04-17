@@ -2,8 +2,11 @@ from typing import Awaitable, Callable
 
 from nicegui import background_tasks, ui
 from nicegui.dependencies import register_component
+from utils import is_authenticated, get_item, set_item
 
 register_component("router_frame", __file__, "router_frame.js")
+
+NEED_LOGIN = ["/dataset", "/hours", "/users", "/cluster"]
 
 
 class Router:
@@ -22,12 +25,14 @@ class Router:
         self.routes[path] = ("class", page)
 
     def open(self, target: str):
-        print(target)
-        path = target
-        builder = self.routes[target]
-
         async def build():
             with self.content:
+                path = target
+                builder = self.routes[target]
+                session_id = await get_item("id")
+                if not is_authenticated(session_id) and path in NEED_LOGIN:
+                    path = "/login"
+                    builder = self.routes[path]
                 await ui.run_javascript(
                     f'history.pushState({{page: "{path}"}}, "", "{path}")',
                     respond=False,

@@ -2,13 +2,14 @@ from nicegui import ui
 from analyse.main import used_by_hour, used_by_group
 from data import load_dataset
 from config import task_manager
+from utils import get_item
+from db import session_info
 
 
 class HoursPage:
     group = "所有"
     chart = None
     chart2 = None
-
 
     def get_chart(self, dataset):
         r = used_by_hour(dataset)
@@ -61,26 +62,37 @@ class HoursPage:
             }
             self.chart2 = ui.chart(chart).classes("w-full h-128 mt-16")
 
-    def build(self):
+    async def build(self):
+        self.session_id = await get_item("id")
+        self.user = session_info[self.session_id]["user"]
         with ui.tabs().classes("bg-primary text-white") as tabs:
             ui.tab("每小时上网人数")
             ui.tab("各部门上网人数")
         with ui.element("div").classes("p-4 max-w-[800px] mx-auto"):
             with ui.tab_panels(tabs, value="每小时上网人数"):
-                with ui.tab_panel("每小时上网人数"):
-                    ui.select(
+                if self.user["manage"] == "所有":
+                    options = (
                         [
                             "所有",
-                            "人事行政中心",
-                            "业务创新中心",
-                            "市场战略发展中心",
-                            "政企事业部",
-                            "研发中心",
-                            "渠道生态合作事业部",
-                            "通用市场部",
+                            "大一",
+                            "大二",
+                            "大三",
+                            "大四",
+                            "后勤",
+                            "办公室",
+                            "学工处",
                         ],
+                    )
+                else:
+                    self.group = self.user["manage"]
+                    options = [self.user["manage"]]
+                with ui.tab_panel("每小时上网人数"):
+                    ui.select(
+                        options,
                         label="部门",
-                    ).props("filled").bind_value(self, "group")
+                    ).props(
+                        "filled"
+                    ).bind_value(self, "group")
                     self.button1 = (
                         ui.button("分析上网时间分布", on_click=self.on_button1_click)
                         .props("push")

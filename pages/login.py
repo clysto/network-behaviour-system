@@ -1,8 +1,7 @@
 from nicegui import ui
 from config import router
-from db import db
-from fastapi import Request
-import uuid
+from db import db, session_info
+from utils import get_item
 
 
 class LoginPage:
@@ -16,11 +15,13 @@ class LoginPage:
             return
         if user["password"] == self.password:
             ui.notify("登录成功！", position="top")
+            session_info[self.session_id] = {"authenticated": True, "user": user}
             router.open("/dataset")
         else:
             ui.notify("密码不正确！", type="warning", position="top")
 
-    def build(self):
+    async def build(self):
+        self.session_id = await get_item("id")
         with ui.element("div").classes(
             "max-w-[500px] mx-auto p-4 mt-4 shadow-xl rounded-xl"
         ):
