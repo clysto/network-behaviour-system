@@ -54,6 +54,7 @@ class ClusterPage:
             ui.select(
                 [
                     "K Means ++",
+                    "KNN"
                 ],
                 label="聚类方法",
             ).props(
