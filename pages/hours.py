@@ -71,18 +71,16 @@ class HoursPage:
         with ui.element("div").classes("p-4 max-w-[800px] mx-auto"):
             with ui.tab_panels(tabs, value="每小时上网人数"):
                 if self.user["manage"] == "所有":
-                    options = (
-                        [
-                            "所有",
-                            "大一",
-                            "大二",
-                            "大三",
-                            "大四",
-                            "后勤",
-                            "办公室",
-                            "学工处",
-                        ],
-                    )
+                    options = [
+                        "所有",
+                        "大一",
+                        "大二",
+                        "大三",
+                        "大四",
+                        "后勤",
+                        "办公室",
+                        "学工处",
+                    ]
                 else:
                     self.group = self.user["manage"]
                     options = [self.user["manage"]]
