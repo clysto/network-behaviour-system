@@ -11,7 +11,12 @@ class DatasetPage:
         if page < 1:
             return
         self.current_page = page
-        data = load_dataset((self.current_page - 1) * 100, limit=100).to_dict("records")
+        if self.user["manage"] != "所有":
+            data = load_dataset(
+                (self.current_page - 1) * 100, limit=100, group=self.user["manage"]
+            ).to_dict("records")
+        else:
+            data = load_dataset((self.current_page - 1) * 100, limit=100).to_dict("records")
         self.table.rows.clear()
         self.table.rows.extend(data)
         self.table.update()
