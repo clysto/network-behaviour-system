@@ -16,7 +16,8 @@ class LoginPage:
         if user["password"] == self.password:
             ui.notify("登录成功！", position="top")
             session_info[self.session_id] = {"authenticated": True, "user": user}
-            router.open("/dataset")
+            # router.open("/dataset")
+            ui.open("/dataset")
         else:
             ui.notify("密码不正确！", type="warning", position="top")
 

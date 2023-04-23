@@ -2,6 +2,7 @@ from nicegui import ui, app, Client
 from fastapi import Request
 import uuid
 from utils import set_item
+from db import session_info
 
 from pages import *
 from config import router
@@ -24,6 +25,10 @@ async def main(client: Client, request: Request):
         request.session["id"] = str(uuid.uuid4())
     await client.connected()
     await set_item("id", request.session["id"])
+    try:
+        user = session_info[request.session["id"]]["user"]
+    except Exception:
+        user = None
     client.content.classes("p-0")
     ui.colors(primary="#3874c8")
     with ui.header(elevated=True).style("background-color: #3874c8").classes(
@@ -45,9 +50,10 @@ async def main(client: Client, request: Request):
             ui.button("聚类分析", on_click=lambda: router.open("/cluster")).classes(
                 "font-bold"
             ).props("flat color=white")
-            ui.button("用户管理", on_click=lambda: router.open("/users")).classes(
-                "font-bold"
-            ).props("flat color=white")
+            if user is not None and user["manage"] == "所有":
+                ui.button("用户管理", on_click=lambda: router.open("/users")).classes(
+                    "font-bold"
+                ).props("flat color=white")
             ui.button("登录", on_click=lambda: router.open("/login")).classes(
                 "font-bold"
             ).props("flat color=white")
