@@ -5,6 +5,8 @@ from data import load_dataset
 from matplotlib.figure import Figure
 import io
 import base64
+from utils import get_item
+from db import session_info
 
 
 class ClusterPage:
@@ -13,10 +15,12 @@ class ClusterPage:
     k = "2"
     cols = "hour"
 
-
     def cluster(self):
         if self.k.isdigit():
-            dataset = load_dataset(limit=-1)
+            if self.user["manage"] == "所有":
+                dataset = load_dataset(limit=-1)
+            else:
+                dataset = load_dataset(limit=-1, group=self.user["manage"])
             return k_means(dataset, self.cols, k=int(self.k))
         else:
             with self.container:
@@ -48,7 +52,9 @@ class ClusterPage:
 
         self.button.props("loading=false")
 
-    def build(self):
+    async def build(self):
+        self.session_id = await get_item("id")
+        self.user = session_info[self.session_id]["user"]
         self.container = ui.element("div").classes("p-4 max-w-[800px] mx-auto")
         with self.container:
             ui.select(
@@ -65,6 +71,7 @@ class ClusterPage:
                     "hour",
                     "weekday",
                     "ret",
+                    "duration",
                 ],
                 label="聚类属性",
             ).props(

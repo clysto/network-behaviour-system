@@ -39,6 +39,7 @@ class DatasetPage:
             {"name": "switchIP", "label": "Switch IP", "field": "switchIP"},
             {"name": "time", "label": "Time", "field": "time"},
             {"name": "ret", "label": "Ret", "field": "ret"},
+            {"name": "duration", "label": "Duration", "field": "duration"},
         ]
         # if self.user["manage"] != "所有":
         #     data = load_dataset(

@@ -13,6 +13,7 @@ dataset = dataset.loc[:, ~dataset.columns.str.contains("^Unnamed")]
 all_types = gen_url_types(len(dataset))
 dataset["url"] = all_types
 dataset["time"] = pd.to_datetime(dataset["time"])
+dataset["duration"] = np.random.randint(120, size=len(dataset))
 
 print(dataset)
-# dataset.to_csv("dataset2.csv", index=False)
+dataset.to_csv("dataset2.csv", index=False)

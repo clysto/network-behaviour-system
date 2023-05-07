@@ -34,4 +34,4 @@ class SessionStore:
         return default
 
 
-session_info = SessionStore()
+session_info = {}
