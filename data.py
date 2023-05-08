@@ -10,7 +10,7 @@ def load_dataset(offset=0, limit=100, group=None):
     else:
         filter = {}
     global CACHE
-    if limit == -1:
+    if limit == -1 and group is None:
         if CACHE is None:
             records = db["dataset"].find(filter)
             df = pd.DataFrame(list(records))
