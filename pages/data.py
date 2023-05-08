@@ -109,7 +109,7 @@ class DatasetPage:
                         "id": 1,
                         "account": 1,
                         "group": 1,
-                        "ip": 1,
+                        "IP": 1,
                         "url": 1,
                         "port": 1,
                         "vlan": 1,
