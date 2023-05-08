@@ -116,6 +116,7 @@ class DatasetPage:
                         "switchIP": 1,
                         "time": 1,
                         "ret": 1,
+                        "duration": 1,
                         "hour": {"$hour": "$time"},
                     }
                 },
