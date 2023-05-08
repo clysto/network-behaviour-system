@@ -99,6 +99,9 @@ class DatasetPage:
         # rows = db.dataset.find(
         #     {"url": self.url_type}
         # ).limit(100)
+        mm = {"url": self.url_type, "hour": int(self.hour)}
+        if self.user["manage"] != "所有":
+            mm["group"] = self.user["manage"]
         rows = db.dataset.aggregate(
             [
                 {
@@ -116,7 +119,7 @@ class DatasetPage:
                         "hour": {"$hour": "$time"},
                     }
                 },
-                {"$match": {"url": self.url_type, "hour": int(self.hour)}},
+                {"$match": mm},
                 {"$limit": 100},
             ]
         )
