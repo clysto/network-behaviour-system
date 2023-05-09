@@ -3,6 +3,7 @@ from nicegui import ui
 from utils import get_item
 from db import session_info, db
 import numpy as np
+from utils import send_email
 
 
 class DatasetPage:
@@ -93,6 +94,9 @@ class DatasetPage:
                 )
 
     def send_email(self):
+        for r in self.table2.rows:
+            print(r["account"])
+            send_email(r["account"], "上网预警", "校园网过度使用，不利于自身健康发展，请合理规划校园网使用时间。")
         ui.notify("邮件已发送!")
 
     def show_alert(self):
